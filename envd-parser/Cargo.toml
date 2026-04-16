@@ -1,0 +1,12 @@
+[package]
+name = "envd-parser"
+version = "0.1.0"
+edition = "2024"
+description = "A simple dotenv!"
+repository = "https://github.com/Srlion/envd-rs"
+license = "MIT"
+keywords = ["config", "dotenv", "env", "envd", "environment-variables"]
+categories = ["command-line-utilities", "config", "development-tools"]
+
+[dependencies]
+regex-lite = { version = "0.1.9" }
