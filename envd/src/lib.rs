@@ -1,6 +1,6 @@
 use std::{io, path::Path};
 
-pub use envd_macros::{set_path, var};
+pub use envd_macros::var;
 pub use envd_parser::parse;
 
 pub fn load() -> io::Result<()> {
