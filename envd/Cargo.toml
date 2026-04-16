@@ -5,7 +5,7 @@ edition = "2024"
 description = "A simple dotenv!"
 repository = "https://github.com/Srlion/envd-rs"
 license = "MIT"
-keywords = ["config", "dotenv", "env", "envd", "environment-variables"]
+keywords = ["config", "dotenv", "env", "env-variables", "envd"]
 categories = ["command-line-utilities", "config", "development-tools"]
 
 [dependencies]
