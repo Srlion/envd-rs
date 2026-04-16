@@ -1,6 +1,6 @@
 [package]
 name = "envd"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 description = "A simple dotenv!"
 repository = "https://github.com/Srlion/envd-rs"
@@ -9,5 +9,5 @@ keywords = ["config", "dotenv", "env", "env-variables", "envd"]
 categories = ["command-line-utilities", "config", "development-tools"]
 
 [dependencies]
-envd-macros = { path = "../envd-macros", version = "0.2.0" }
+envd-macros = { path = "../envd-macros", version = "0.3.0" }
 envd-parser = { path = "../envd-parser", version = "0.1.0" }

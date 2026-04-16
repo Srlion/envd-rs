@@ -1,6 +1,6 @@
 # envd
 
-A simple, fast `.env` file loader for Rust — with both runtime loading and compile-time macro support.
+A simple, fast `.env` loader for Rust — runtime loading and compile-time macros.
 
 ## Installation
 
@@ -9,11 +9,9 @@ A simple, fast `.env` file loader for Rust — with both runtime loading and com
 envd = "0.1.0"
 ```
 
-## Usage
+## Runtime loading
 
-### Runtime loading
-
-Load a `.env` file into the process environment:
+Load `.env` into the process environment:
 
 ```rust
 fn main() {
@@ -23,38 +21,34 @@ fn main() {
 }
 ```
 
-By default, existing environment variables are **not** overridden. To override them:
+Existing variables are preserved by default. To override:
 
 ```rust
 envd::load_with("./.env", envd::Options::new().override_existing()).unwrap();
 ```
 
-You can also parse a `.env` file directly into a `HashMap` without touching the environment:
+Or parse into a `HashMap` without touching the environment:
 
 ```rust
 let map = envd::parse(include_str!(".env"));
 ```
 
-### Compile-time macros
+## Compile-time macros
 
-Embed env values directly into your binary at compile time.
+Embed values from `.env` directly into your binary. Missing keys become **compile errors** — no surprises at runtime.
 
 ```rust
 const API_KEY: &str = envd::var!("API_KEY");
-const PORT: &str = envd::var!("PORT");
-
-fn main() {
-    let port = envd::var!("PORT");
-    println!("Listening on port {PORT}");
-}
+const PORT: u16 = envd::var!("PORT": u16);
 ```
+
+Or fall back to the compile-time value when the env var isn't set at runtime:
 
 ```rust
-// any other file in your crate
-const DB_URL: &str = envd::var!("DATABASE_URL");
+let port: u16 = envd::dyn_var!("PORT": u16);
 ```
 
-If the variable is missing, you'll get a **compile error** — no surprises at runtime.
+Supported types: `str`, `u8`–`u64`, `usize`, `i8`–`i64`, `isize`, `f32`, `f64`, `bool`.
 
 ## .env Syntax
 

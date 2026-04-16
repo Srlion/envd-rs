@@ -51,3 +51,40 @@ pub fn typed(value: &str, ty: Option<&Ident>, span: Span) -> Result<TokenStream,
         Some(other) => Err(Error::new(span, format!("unsupported type `{other}`"))),
     }
 }
+
+pub fn runtime_or(
+    key: &str,
+    ty: Option<&Ident>,
+    fallback_value: &str,
+    span: Span,
+) -> Result<TokenStream, Error> {
+    let fallback_tokens = typed(fallback_value, ty, span)?;
+
+    match ty.map(|t| t.to_string()).as_deref() {
+        None | Some("str") => Ok(quote! {
+            match ::std::env::var(#key) {
+                Ok(v) => v,
+                Err(_) => ::std::string::String::from(#fallback_tokens),
+            }
+        }),
+        Some(_) => {
+            let ty_ident = ty.unwrap();
+            let key_lit = key;
+            Ok(quote! {
+                match ::std::env::var(#key_lit) {
+                    Ok(v) => match <#ty_ident as ::std::str::FromStr>::from_str(&v) {
+                        Ok(parsed) => parsed,
+                        Err(e) => ::std::panic!(
+                            "env var `{}` is set but failed to parse as `{}`: {}",
+                            #key_lit, ::std::stringify!(#ty_ident), e,
+                        ),
+                    },
+                    Err(::std::env::VarError::NotPresent) => #fallback_tokens,
+                    Err(::std::env::VarError::NotUnicode(_)) => ::std::panic!(
+                        "env var `{}` contains invalid unicode", #key_lit,
+                    ),
+                }
+            })
+        }
+    }
+}

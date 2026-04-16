@@ -1,6 +1,6 @@
 [package]
 name = "envd-macros"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 description = "Proc macros for gmodx-rs"
 repository = "https://github.com/Srlion/gmodx-rs"
